@@ -1,0 +1,128 @@
+			### 외부 능력평가 문제 ###
+
+cmd에서 sqlplus system/1234 했을 때 접속이 될 수도 안될 수도 있음. --> 환경설정이 안돼서..
+파일 탐색기 : C - oraclexe - app -oaracle -product - 11.2.0 - server - bin 들어가서 경로 클릭 cmd쳐서 들어가기.
+그러고 sqlplus system/1234
+
+create table member_tbl_02 (
+	custno number(6) not null primary key,
+	custname varchar2(20),
+	phone varchar2(13),
+	address varchar2(60),
+	joindate date,
+	grade char(1),
+	city char(2) );
+
+insert into member_tbl_02 values (100001, '김행복', '010-1111-2222', '서울 동대문구 휘경1동', '20151202', 'A', '01');
+insert into member_tbl_02 values (100002, '이축복', '010-1111-3333', '서울 동대문구 휘경2동', '20151206', 'B', '01');
+insert into member_tbl_02 values (100003, '장믿음', '010-1111-4444', '울릉군 울릉읍 독도1리', '20151001', 'B', '30');
+insert into member_tbl_02 values (100004, '최사랑', '010-1111-5555', '울릉군 울릉읍 독도2리', '20151113', 'A', '30');
+insert into member_tbl_02 values (100005, '진평화', '010-1111-6666', '제주도 제주시 외나무골', '20151225', 'B', '60');
+insert into member_tbl_02 values (100006, '차공단', '010-1111-7777', '제주도 제주시 감나무골', '20151211', 'C', '60');
+
+
+create table money_tbl_02 (
+	custno number(6) not null,
+	saleno number(8) not null,
+	pcost number(8),
+	amount number(4),
+	price number(8),
+	pcode varchar2(4),
+	sdate date,
+	constraint PK_Nos primary key(custno, saleno) );
+
+insert into money_tbl_02 values (100001, 20160001, 500, 5, 2500, 'A001', '20160101');
+insert into money_tbl_02 values (100001, 20160002, 1000, 4, 4000, 'A002', '20160101');
+insert into money_tbl_02 values (100001, 20160003, 500, 3, 1500, 'A008', '20160101');
+
+insert into money_tbl_02 values (100002, 20160004, 2000, 1, 2000, 'A004', '20160102');
+insert into money_tbl_02 values (100002, 20160005, 500, 1, 500, 'A001', '20160103');
+
+insert into money_tbl_02 values (100003, 20160006, 1500, 2, 3000, 'A003', '20160103');
+
+insert into money_tbl_02 values (100004, 20160007, 500, 2, 1000, 'A001', '20160104');
+insert into money_tbl_02 values (100004, 20160008, 300, 1, 300, 'A005', '20160104');
+insert into money_tbl_02 values (100004, 20160009, 600, 1, 600, 'A006', '20160104');
+insert into money_tbl_02 values (100004, 20160010, 3000, 1, 3000, 'A007', '20160106');
+
+==> INSERT할 때 너무 귀찮으니깐 PDF에서 파일 드래그 복사해서 메모장 켜서 복붙 그리고 insert into~하면서 전부 작업하고 test라는 이름으로 저장 후 확장자명만 sql로 바꿈. 그리고 파일탐색기에서 test.sql있는 곳에서 cmd 클릭해서 들어가서 @test.sql - commit; 하면 test.sql안에 있는 내용을 실행해줌.
+
+Dynamic web project하나 만들기 - server 추가 - 하단 servers에 들어가서 포트 설정하고 저장 후 우클릭하고 start했을 때 겹치는게 없어야함 - 잘돌아간다면 modules에 들어가서 path설정
+프로젝트 우클릭 properties - classpath에 server runtime 추가 - project facets 자바 버젼과 runtimes 설정 apply - server 서버 클릭 apply
+jsp파일 생성 후에 window - web browser 들어가서 크롬으로 바꾸고 HELLOWORLD가 찍히는지 확인
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<style>
+	header{
+		text-align : center;
+		height : 50px;
+	}
+	nav ul{
+		display:flex;
+		justify-content : space-around;
+	}
+	section {
+	height : 600px;
+	}
+</style>
+
+
+
+<header>
+	<h1>쇼핑몰 회원관리 ver 1.0</h1>
+</header>
+<nav>
+	<ul>
+		<li><a href="memberjoin.jsp">회원등록</a></li>
+		<li><a href="memberinfo.jsp">회원목록조회/수정</a></li>
+		<li><a href="sales.jsp">회원매출조회</a></li>
+		<li><a href="index.jsp">홈으로</a></li>
+	</ul>
+</nav>
+<section></section>
+<footer>
+	HRDKOREA Copyright@2016 ALL -
+</footer>
+
+
+
+</body>
+</html>
+
+
+==> 기본 레이아웃을 index.jsp에 만들어서 memberinfo.jsp, memberjoin.jsp, sales.jsp 에다가 모두 복사 붙여넣기
+
+
+
+
+
+@@@ proc의 역할은 파라미터값들을 받아내서 DB에 INSERT를 해주는거임. @@@
+
+
+(HRD_1234우클릭해서 java EE Tools - Generate Development 뭐시기 클릭하면 WEB-INF 이게 없을 때 만들어줌.)
+
+C - oraclxe - 쭉 경로 타는거 - jdbc - oracle6.jar를 lib에다가 넣어주기
+
+C-program files - apache software foundation - tomcat 9.0 -lib 안에 jsp-api.jar 와 servlet-api.jar가 라이브러리를 못찾는 문제가 발생하지 않기 때문에 같이 lib 폴더에 넣어주기
+
+++ select max(custno) from member_tbl_02; ==> member_tbl_02의 custno의 최고값을 가지고 올꺼임.
+
+++onsubmit ==> 이런식으로 on이 붙어있는건 자바 스크립트로 처리하는거라고 보면 됨. 그리고 onsubmit ="return false"로 하면 submit을 잠시 꺼두는거임.
+
+++자바 simpledateformat Calendar ==> 날짜 포맷 지정하는 문제가 더러 나올것임.
+
+
+@ java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because the return value of "Dto.MemberDto.getGrade()" is null
+
+==> 이 에러는 수업하면서 등록테스트하다가 빈칸으로 잘못 들어간 애들 때문에 eclipse가 읽어올 수 없어서 그런거임.
+

@@ -71,7 +71,7 @@ public class MemberDao {
 			try {
 				rs.close();
 			} catch (Exception e) {
-				
+
 			}
 			try {
 				pstmt.close();
@@ -87,39 +87,91 @@ public class MemberDao {
 	}
 
 	// UPDATE
-	public void Update(MemberDto dto) {
+	public boolean Update(MemberDto dto) {
+		
+		boolean isok = false;
+		
 		try {
-
+			pstmt = con.prepareStatement("update member_tbl_02 set custname=?, phone=?, address=?, joindate=?, grade=?, city=? where custno=?");
+			pstmt.setString(1, dto.getCustname());
+			pstmt.setString(2, dto.getPhone());
+			pstmt.setString(3, dto.getAddress());
+			pstmt.setString(4, dto.getJoindate());
+			pstmt.setString(5, dto.getGrade());
+			pstmt.setString(6, dto.getCity());
+			pstmt.setInt(7, Integer.parseInt(dto.getCustno()));
+			int result = pstmt.executeUpdate();
+			if(result > 0) {
+				isok = true;
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
+			try {
+				con.close();
+			} catch (Exception e) {
+			}
 			
 		}
+		return isok;
 	}
 
 	// SELECT
-	public void Select(MemberDto dto) {
+	public MemberDto Select(int custno) {
+		MemberDto dto = null;
 		try {
+			pstmt = con.prepareStatement("select * from member_tbl_02 where custno=?");
+			pstmt.setInt(1, custno);
+			rs = pstmt.executeQuery();
+			if (rs != null) {
+				rs.next();
+				dto = new MemberDto();
+				dto.setCustno(rs.getInt("custno") + "");
+				dto.setCustname(rs.getString("custname"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setJoindate(rs.getString("joindate"));
+				dto.setAddress(rs.getString("address"));
+				dto.setGrade(rs.getString("grade"));
+				dto.setCity(rs.getString("city"));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
+			try {
+				con.close();
+			} catch (Exception e) {
+			}
 
 		}
+		return dto;
 	}
 
 	// SELECTALL
 	public List<MemberDto> SelectAll() {
 		List<MemberDto> list = new ArrayList();
 		MemberDto dto = null;
-		
+
 		try {
 			pstmt = con.prepareStatement("select * from member_tbl_02");
-			rs=pstmt.executeQuery();
-			if(rs != null) {
-				while(rs.next()) {
+			rs = pstmt.executeQuery();
+			if (rs != null) {
+				while (rs.next()) {
 					dto = new MemberDto();
-					dto.setCustno(rs.getInt("custno")+"");
+					dto.setCustno(rs.getInt("custno") + "");
 					dto.setCustname(rs.getString("custname"));
 					dto.setPhone(rs.getString("phone"));
 					dto.setAddress(rs.getString("address"));
@@ -129,19 +181,22 @@ public class MemberDao {
 					list.add(dto);
 				}
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				rs.close();
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 			try {
 				pstmt.close();
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 			try {
 				con.close();
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 		}
 		return list;
 	}
